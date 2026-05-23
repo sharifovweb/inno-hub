@@ -8,7 +8,12 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { getApiErrorMessage } from "@/lib/api";
 import { isFirebaseAuthEnabled } from "@/lib/firebase";
-import { getGoogleAuthErrorMessage, getGoogleRedirectProfile, signInWithGoogle } from "@/lib/googleAuth";
+import {
+  getGoogleAuthErrorMessage,
+  getGoogleRedirectProfile,
+  isGoogleUnauthorizedDomainError,
+  signInWithGoogle,
+} from "@/lib/googleAuth";
 
 type RegisterFormState = {
   name: string;
@@ -66,6 +71,10 @@ const Register = () => {
         }
       } catch (err) {
         if (!isMounted) {
+          return;
+        }
+
+        if (isGoogleUnauthorizedDomainError(err)) {
           return;
         }
 

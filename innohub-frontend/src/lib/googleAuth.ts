@@ -116,6 +116,8 @@ export function getGoogleAuthErrorMessage(
         return "Google kirish jarayoni bekor qilindi.";
       case "auth/web-storage-unsupported":
         return "Brauzer popup autentifikatsiyasini qo'llamadi, redirect ishlatiladi.";
+      case "auth/unauthorized-domain":
+        return "Google orqali kirish uchun bu domen Firebase sozlamalariga qo'shilmagan.";
       default:
         return error.message || fallback;
     }
@@ -130,4 +132,8 @@ export function getGoogleAuthErrorMessage(
   }
 
   return fallback;
+}
+
+export function isGoogleUnauthorizedDomainError(error: unknown) {
+  return error instanceof FirebaseError && error.code === "auth/unauthorized-domain";
 }
